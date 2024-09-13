@@ -1,0 +1,1 @@
+export const locations = ['Bujumbura, Burundi', 'Gitega, Burundi', 'Kigali, Rwanda', 'Dar es Salaam, Tanzanie'];

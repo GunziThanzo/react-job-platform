@@ -1,71 +1,41 @@
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-} from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
-import HomePage from './pages/HomePage';
-import JobsPage from './pages/JobsPage';
-import NotFoundPage from './pages/NotFoundPage';
-import JobPage, { jobLoader } from './pages/JobPage';
-import AddJobPage from './pages/AddJobPage';
-import EditJobPage from './pages/EditJobPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import JobList from './components/JobList';
+import JobDetails from './components/JobDetails';
+import HomePage from './components/HomePage';
+import { initialJobs } from './data/initialJobs';
 
-const App = () => {
-  // Add New Job
-  const addJob = async (newJob) => {
-    const res = await fetch('/api/jobs', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newJob),
-    });
-    return;
-  };
+function App() {
+  const [jobs, setJobs] = useState(initialJobs);
+  const [darkMode, setDarkMode] = useState(false);
 
-  // Delete Job
-  const deleteJob = async (id) => {
-    const res = await fetch(`/api/jobs/${id}`, {
-      method: 'DELETE',
-    });
-    return;
-  };
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
-  // Update Job
-  const updateJob = async (job) => {
-    const res = await fetch(`/api/jobs/${job.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(job),
-    });
-    return;
-  };
-
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path='/' element={<MainLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path='/jobs' element={<JobsPage />} />
-        <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
-        <Route
-          path='/edit-job/:id'
-          element={<EditJobPage updateJobSubmit={updateJob} />}
-          loader={jobLoader}
-        />
-        <Route
-          path='/jobs/:id'
-          element={<JobPage deleteJob={deleteJob} />}
-          loader={jobLoader}
-        />
-        <Route path='*' element={<NotFoundPage />} />
-      </Route>
-    )
+  return (
+    <Router>
+      <div className={`min-h-screen flex flex-col bg-gray-100 dark:bg-black ${darkMode ? 'dark' : ''}`}>
+        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+        <div className="flex-grow pb-24 pt-12">
+          <main className="max-w-screen-lg mx-auto p-4 pt-20">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/jobs" element={<JobList jobs={jobs} setJobs={setJobs} />} />
+              <Route path="/jobs/:id" element={<JobDetails jobs={jobs} />} />
+            </Routes>
+          </main>
+        </div>
+        <Footer />
+      </div>
+    </Router>
   );
+}
 
-  return <RouterProvider router={router} />;
-};
 export default App;

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-poppins; /* Apply Poppins font globally */
+  background-color: theme('colors.gray.100'); /* Light background for light mode */
+}
+
+.dark body {
+  @apply bg-gray-800; /* Softer dark background */
+  color: theme('colors.gray.200'); /* Softer text color */
+}

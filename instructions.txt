@@ -1,0 +1,3 @@
+I have a React project using Vite, with Tailwind CSS configured. 1. Install React Router for routing. 
+2. Develop a job search website using React. The site should simulate a job search environment by 
+displaying dummy job listings(programming, design, marketing, bank teller, etc) that users can browse, search, and filter based on various criteria. 
